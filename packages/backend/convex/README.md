@@ -1,88 +1,50 @@
-# Welcome to your Convex functions directory!
+# Acme — Convex Backend
 
-Write your Convex functions here.
-See https://docs.convex.dev/functions for more.
+Convex functions and configuration for the Acme application.
 
-A query function that takes two arguments looks like:
+## Components
 
-```ts
-// convex/myFunctions.ts
-import { query } from "./_generated/server";
-import { v } from "convex/values";
+Three Convex components are installed (see `convex.config.ts`):
 
-export const myQueryFunction = query({
-  // Validators for arguments.
-  args: {
-    first: v.number(),
-    second: v.string(),
-  },
+| Component | Package | Purpose |
+|-----------|---------|---------|
+| `betterAuth` | `@convex-dev/better-auth` | Auth adapter — maps Better Auth to Convex tables |
+| `rateLimiter` | `@convex-dev/rate-limiter` | Token-bucket rate limiting |
+| `resend` | `@convex-dev/resend` | Transactional email via Resend |
 
-  // Function implementation.
-  handler: async (ctx, args) => {
-    // Read the database as many times as you need here.
-    // See https://docs.convex.dev/database/reading-data.
-    const documents = await ctx.db.query("tablename").collect();
+## Functions
 
-    // Arguments passed from the client are properties of the args object.
-    console.log(args.first, args.second);
+| File | Export | Type | Description |
+|------|--------|------|-------------|
+| `auth.ts` | `createAuth` | — | Factory that builds a Better Auth instance per request |
+| `auth.ts` | `getCurrentUser` | query | Returns the authenticated user or `null` |
+| `healthCheck.ts` | `get` | query | Returns `"OK"` — used for uptime checks |
+| `privateData.ts` | `get` | query | Returns a message; guards on auth status |
+| `http.ts` | default | httpRouter | Registers Better Auth HTTP routes |
 
-    // Write arbitrary JavaScript here: filter, aggregate, build derived data,
-    // remove non-public properties, or create new objects.
-    return documents;
-  },
-});
-```
+## Rate Limit Configuration
 
-Using this query function in a React component looks like:
+Defined in `rateLimit.ts`:
 
-```ts
-const data = useQuery(api.myFunctions.myQueryFunction, {
-  first: 10,
-  second: "hello",
-});
-```
+| Name | Kind | Rate | Period |
+|------|------|------|--------|
+| `sendVerificationOTP` | token bucket | 3 | 5 min |
+| `sendResetPassword` | token bucket | 2 | 10 min |
 
-A mutation function looks like:
+## Email Templates
 
-```ts
-// convex/myFunctions.ts
-import { mutation } from "./_generated/server";
-import { v } from "convex/values";
+HTML email generators live in `emails/`:
 
-export const myMutationFunction = mutation({
-  // Validators for arguments.
-  args: {
-    first: v.string(),
-    second: v.string(),
-  },
+- `otpVerification.ts` — OTP verification code email
+- `resetPassword.ts` — Password reset link email
 
-  // Function implementation.
-  handler: async (ctx, args) => {
-    // Insert or modify documents in the database here.
-    // Mutations can also read from the database like queries.
-    // See https://docs.convex.dev/database/writing-data.
-    const message = { body: args.first, author: args.second };
-    const id = await ctx.db.insert("messages", message);
+## Required Convex Environment Variables
 
-    // Optionally, return a value from your mutation.
-    return await ctx.db.get("messages", id);
-  },
-});
-```
+Set these in the Convex dashboard under your project's settings:
 
-Using this mutation function in a React component looks like:
-
-```ts
-const mutation = useMutation(api.myFunctions.myMutationFunction);
-function handleButtonPress() {
-  // fire and forget, the most common way to use mutations
-  mutation({ first: "Hello!", second: "me" });
-  // OR
-  // use the result once the mutation has completed
-  mutation({ first: "Hello!", second: "me" }).then((result) => console.log(result));
-}
-```
-
-Use the Convex CLI to push your functions to a deployment. See everything
-the Convex CLI can do by running `npx convex -h` in your project root
-directory. To learn more, launch the docs with `npx convex docs`.
+| Variable | Description |
+|----------|-------------|
+| `BETTER_AUTH_SECRET` | Secret for Better Auth session signing |
+| `SITE_URL` | App public URL (used as `baseURL` + trusted origin) |
+| `RESEND_API_KEY` | Resend API key |
+| `RESEND_FROM` | Sender email address |
