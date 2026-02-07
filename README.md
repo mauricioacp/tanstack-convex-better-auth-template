@@ -1,6 +1,47 @@
 # Acme
 
-Full-stack TypeScript monorepo built with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack).
+Full-stack TypeScript monorepo template built with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack).
+
+## Use as Template
+
+1. **Clone and rename:**
+
+   ```bash
+   git clone https://github.com/your-org/acme.git my-project
+   cd my-project
+   rm -rf .git && git init
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   bun install
+   ```
+
+3. **Set up Convex** (follow prompts to create a project):
+
+   ```bash
+   bun run dev:setup
+   ```
+
+4. **Configure env vars** — copy examples and fill in values:
+
+   ```bash
+   cp apps/web/.env.example apps/web/.env
+   cp packages/backend/.env.local.example packages/backend/.env.local
+   ```
+
+5. **Start developing:**
+
+   ```bash
+   bun run dev
+   ```
+
+6. **Create your first release:**
+
+   ```bash
+   bun run release:first
+   ```
 
 ## Tech Stack
 
@@ -77,13 +118,6 @@ bun run dev
 
 Opens at [http://localhost:3001](http://localhost:3001). Convex dev server runs alongside.
 
-## Auth Features
-
-- **Email + password** sign-up/sign-in with email verification required
-- **Email OTP** — 6-digit code, 10-minute expiry, auto-sent on sign-up
-- **Password reset** via email link
-- **Rate limiting** — OTP: 3 requests / 5 min, password reset: 2 requests / 10 min
-
 ## Available Scripts
 
 | Command | Description |
@@ -95,8 +129,98 @@ Opens at [http://localhost:3001](http://localhost:3001). Convex dev server runs 
 | `bun run dev:setup` | Configure Convex project |
 | `bun run check-types` | TypeScript type checking across all packages |
 | `bun run check` | Biome formatting + linting (with auto-fix) |
+| `bun run lint` | Biome lint check (read-only) |
+| `bun run format` | Biome format check (read-only) |
 | `cd apps/web && bun run test` | Run Vitest test suite |
 | `cd apps/web && bun run test:watch` | Run tests in watch mode |
+| `bun run release` | Bump version, update changelog, create tag |
+| `bun run release:first` | Create first release (v0.1.0) |
+| `bun run release:dry` | Preview what a release would do |
+| `bun run release:patch` | Force a patch release |
+| `bun run release:minor` | Force a minor release |
+| `bun run release:major` | Force a major release |
+
+## Commit Conventions
+
+This project enforces [Conventional Commits](https://conventionalcommits.org) via commitlint + husky.
+
+| Type | Purpose |
+|------|---------|
+| `feat` | New feature (bumps minor) |
+| `fix` | Bug fix (bumps patch) |
+| `perf` | Performance improvement (bumps patch) |
+| `docs` | Documentation only |
+| `style` | Code style (formatting, semicolons, etc.) |
+| `refactor` | Code change that neither fixes a bug nor adds a feature |
+| `test` | Adding or updating tests |
+| `build` | Build system or external dependencies |
+| `ci` | CI configuration |
+| `chore` | Other changes (tooling, configs) |
+| `revert` | Reverting a previous commit |
+
+**Format:** `type(scope): description` — scope is optional, freeform.
+
+**Examples:**
+
+```
+feat(auth): add email OTP verification
+fix(web): prevent double form submission
+docs: update README setup instructions
+refactor(backend): extract rate limit config
+```
+
+A breaking change appends `!` after the type/scope: `feat(api)!: change response format`
+
+## Releasing
+
+Releases use [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) which reads conventional commits to automatically:
+
+1. Determine the next semver version based on commit types
+2. Update `CHANGELOG.md` with grouped changes
+3. Bump `version` in `package.json`
+4. Create a git commit and tag
+
+```bash
+# First release (creates v0.1.0 without bumping)
+bun run release:first
+
+# Subsequent releases (auto-determines bump from commits)
+bun run release
+
+# Preview without making changes
+bun run release:dry
+
+# Force a specific bump level
+bun run release:patch   # 0.1.0 → 0.1.1
+bun run release:minor   # 0.1.0 → 0.2.0
+bun run release:major   # 0.1.0 → 1.0.0
+```
+
+After releasing, push the commit and tag:
+
+```bash
+git push --follow-tags
+```
+
+## CI/CD
+
+GitHub Actions runs on every push to `main` and on pull requests targeting `main`.
+
+| Job | What it checks |
+|-----|---------------|
+| **Lint & Format** | Biome lint + format (read-only, no auto-fix) |
+| **Type Check** | TypeScript across all workspaces |
+| **Test** | Vitest suite in `apps/web` |
+| **Build** | Full production build (runs after the above 3 pass) |
+
+See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for details.
+
+## Auth Features
+
+- **Email + password** sign-up/sign-in with email verification required
+- **Email OTP** — 6-digit code, 10-minute expiry, auto-sent on sign-up
+- **Password reset** via email link
+- **Rate limiting** — OTP: 3 requests / 5 min, password reset: 2 requests / 10 min
 
 ## Testing
 

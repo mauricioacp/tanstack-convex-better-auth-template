@@ -1,6 +1,6 @@
 import { api } from "@acme/backend/convex/_generated/api";
+import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -11,9 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-
 import { Button } from "./ui/button";
-import { useNavigate } from "@tanstack/react-router";
 
 export default function UserMenu() {
 	const navigate = useNavigate();

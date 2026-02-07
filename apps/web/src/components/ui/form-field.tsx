@@ -1,8 +1,7 @@
-import { type ReactNode } from "react";
-
+import type * as React from "react";
+import type { ReactNode } from "react";
 import { Input } from "./input";
 import { Label } from "./label";
-import type * as React from "react";
 
 type AnyForm = {
 	// biome-ignore lint/suspicious/noExplicitAny: TanStack Form's ReactFormExtendedApi has 12 invariant type params
