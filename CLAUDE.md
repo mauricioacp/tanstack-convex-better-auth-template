@@ -47,3 +47,12 @@
 - Keep plans extremely concise; sacrifice grammar for concision
 - End each plan with unresolved questions (if any)
 - Use AskUserQuestionTool for missing info; iterate in Plan Mode until crystal clear
+
+### Components
+
+- Keep components small and focused on a single responsibility, use shadcn components when possible.
+- avoid nested ternaries.
+
+### Workflow
+
+For new feature changes open a new branch, when it is complete and unit tested open a descriptive pr, use conventional commits.
