@@ -9,6 +9,8 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as contactForm from "../contactForm.js";
+import type * as emails_contactNotification from "../emails/contactNotification.js";
 import type * as emails_otpVerification from "../emails/otpVerification.js";
 import type * as emails_resetPassword from "../emails/resetPassword.js";
 import type * as healthCheck from "../healthCheck.js";
@@ -25,6 +27,8 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  contactForm: typeof contactForm;
+  "emails/contactNotification": typeof emails_contactNotification;
   "emails/otpVerification": typeof emails_otpVerification;
   "emails/resetPassword": typeof emails_resetPassword;
   healthCheck: typeof healthCheck;
