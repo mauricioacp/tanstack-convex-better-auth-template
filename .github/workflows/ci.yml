@@ -49,6 +49,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: [lint-format, typecheck, test]
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -56,3 +58,85 @@ jobs:
           bun-version: "1.3.5"
       - run: bun install --frozen-lockfile
       - run: bun run build
+
+      - name: Analyze bundle size
+        run: bun run analyze-bundle apps/web/dist json > .bundle-report.json
+
+      - name: Restore baseline
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@v4
+        with:
+          path: .bundle-baseline.json
+          key: bundle-baseline-main
+
+      - name: Comment bundle size on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const current = JSON.parse(fs.readFileSync('.bundle-report.json', 'utf8'));
+
+            const fmt = (bytes) => `${(bytes / 1024).toFixed(2)} KB`;
+
+            let body = `## Bundle Size Report\n\n`;
+            body += `**Total**: ${fmt(current.totalSize)} (${fmt(current.totalGzip)} gzip)\n\n`;
+
+            if (fs.existsSync('.bundle-baseline.json')) {
+              const baseline = JSON.parse(fs.readFileSync('.bundle-baseline.json', 'utf8'));
+              const delta = current.totalGzip - baseline.totalGzip;
+              const sign = delta > 0 ? '+' : '';
+              const pct = baseline.totalGzip ? ((delta / baseline.totalGzip) * 100).toFixed(1) : 'N/A';
+              body += `**vs main**: ${sign}${fmt(delta)} (${sign}${pct}%)\n\n`;
+
+              if (delta > baseline.totalGzip * 0.1) {
+                body += `> **Warning**: Bundle size increased by more than 10%\n\n`;
+              }
+            }
+
+            if (current.totalGzip > 500 * 1024) {
+              body += `> **Warning**: Bundle exceeds 500 KB gzip threshold\n\n`;
+            }
+
+            body += `| File | Size | Gzip |\n|------|------|------|\n`;
+            current.assets.slice(0, 10).forEach(a => {
+              body += `| ${a.name} | ${fmt(a.size)} | ${fmt(a.gzipSize)} |\n`;
+            });
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user?.login === 'github-actions[bot]' &&
+              c.body?.includes('Bundle Size Report')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Save baseline
+        if: github.ref == 'refs/heads/main'
+        run: cp .bundle-report.json .bundle-baseline.json
+
+      - name: Cache baseline
+        if: github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          path: .bundle-baseline.json
+          key: bundle-baseline-main

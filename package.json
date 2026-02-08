@@ -40,7 +40,9 @@
 		"release:major": "commit-and-tag-version --release-as major",
 		"release:patch": "commit-and-tag-version --release-as patch",
 		"release:dry": "commit-and-tag-version --dry-run",
-		"release:first": "commit-and-tag-version --first-release"
+		"release:first": "commit-and-tag-version --first-release",
+		"init": "bun run scripts/init.ts",
+		"analyze-bundle": "bun run scripts/analyze-bundle.ts"
 	},
 	"dependencies": {
 		"@acme/env": "workspace:*",
