@@ -97,7 +97,16 @@ Fill in `apps/web/.env`:
 | `VITE_CONVEX_URL` | Convex deployment URL (from Convex dashboard) |
 | `VITE_CONVEX_SITE_URL` | Convex HTTP actions URL (from Convex dashboard) |
 
-**Convex dashboard env vars** — set these in your Convex project's environment variables:
+**Convex dashboard env vars** — set via CLI (not filesystem `.env` files):
+
+```bash
+npx convex env set BETTER_AUTH_SECRET $(openssl rand -base64 32)
+npx convex env set SITE_URL http://localhost:3001
+npx convex env set RESEND_API_KEY re_xxxxxxxxxxxxx   # from https://resend.com/api-keys
+npx convex env set RESEND_FROM noreply@yourdomain.com
+```
+
+Or set these in the Convex dashboard (Settings → Environment Variables):
 
 | Variable | Description |
 |----------|-------------|

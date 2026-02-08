@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import tailwindcss from "@tailwindcss/vite";
@@ -43,7 +44,7 @@ export default defineConfig({
 		tailwindcss(),
 		tanstackStart(),
 		viteReact(),
-		alchemy(),
+		existsSync(".alchemy/local/wrangler.jsonc") && alchemy(),
 	],
 	define: {
 		__BUILD_COMMIT__: JSON.stringify(getGitCommit()),

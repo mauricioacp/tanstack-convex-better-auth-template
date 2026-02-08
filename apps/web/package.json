@@ -7,6 +7,7 @@
 		"build": "vite build",
 		"serve": "vite preview",
 		"dev:bare": "vite dev",
+		"paraglide:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy url cookie preferredLanguage baseLocale --silent",
 		"check-types": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest"

@@ -49,7 +49,19 @@ Fill in `apps/web/.env`:
 | `VITE_CONVEX_URL` | Convex dashboard → Settings → URL |
 | `VITE_CONVEX_SITE_URL` | Convex dashboard → Settings → HTTP Actions URL |
 
-**Convex dashboard env vars** (Settings → Environment Variables):
+**Convex dashboard env vars** — set via CLI:
+
+```bash
+npx convex env set BETTER_AUTH_SECRET $(openssl rand -base64 32)
+npx convex env set SITE_URL http://localhost:3001
+npx convex env set RESEND_API_KEY re_xxxxxxxxxxxxx   # from https://resend.com/api-keys
+npx convex env set RESEND_FROM noreply@yourdomain.com
+
+# Optional: receive contact form submissions via email
+npx convex env set CONTACT_NOTIFY_EMAIL your-email@example.com
+```
+
+Or set these in the Convex dashboard (Settings → Environment Variables):
 
 | Variable | Description |
 |----------|-------------|
@@ -57,7 +69,7 @@ Fill in `apps/web/.env`:
 | `SITE_URL` | Your app URL (`http://localhost:3001` for local dev) |
 | `RESEND_API_KEY` | From Resend dashboard |
 | `RESEND_FROM` | Sender email (e.g. `noreply@yourdomain.com`) |
-| `CONTACT_NOTIFY_EMAIL` | Email to receive contact form submissions |
+| `CONTACT_NOTIFY_EMAIL` | Email to receive contact form submissions (optional) |
 
 ### 4. Start developing
 

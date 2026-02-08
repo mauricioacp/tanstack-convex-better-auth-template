@@ -19,7 +19,21 @@ This pushes your functions and schema to the production Convex deployment.
 
 ### Environment Variables
 
-Set these in the Convex dashboard (Settings → Environment Variables):
+Set these in your **production** Convex deployment:
+
+```bash
+npx convex env set BETTER_AUTH_SECRET $(openssl rand -base64 32) --prod
+npx convex env set SITE_URL https://yourdomain.com --prod
+npx convex env set RESEND_API_KEY re_xxxxxxxxxxxxx --prod
+npx convex env set RESEND_FROM noreply@yourdomain.com --prod
+
+# Optional
+npx convex env set CONTACT_NOTIFY_EMAIL your-email@example.com --prod
+```
+
+> **Important**: Generate a new `BETTER_AUTH_SECRET` for production — don't reuse the dev secret.
+
+Or set these in the Convex dashboard (Production → Settings → Environment Variables):
 
 | Variable | Value |
 |----------|-------|
@@ -27,7 +41,7 @@ Set these in the Convex dashboard (Settings → Environment Variables):
 | `SITE_URL` | Your production URL (e.g. `https://myapp.com`) |
 | `RESEND_API_KEY` | Production Resend API key |
 | `RESEND_FROM` | Verified sender email |
-| `CONTACT_NOTIFY_EMAIL` | Email for contact form notifications |
+| `CONTACT_NOTIFY_EMAIL` | Email for contact form notifications (optional) |
 
 ## Frontend (Cloudflare)
 
