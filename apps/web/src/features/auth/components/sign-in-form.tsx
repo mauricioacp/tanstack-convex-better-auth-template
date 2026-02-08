@@ -46,7 +46,7 @@ export default function SignInForm() {
 							setRateLimitMessage(
 								`Too many attempts. Try again in ${parsed.retryAfter}s.`,
 							);
-							startCountdown(parsed.retryAfter!);
+							startCountdown(parsed?.retryAfter as number);
 						} else {
 							toast.error(error.error.message || error.error.statusText);
 						}

@@ -1,7 +1,7 @@
 const RATE_LIMIT_PATTERNS = /rate.?limit|too many/i;
 const DEFAULT_RETRY_AFTER = 60;
 
-interface AuthErrorLike {
+type AuthErrorLike = {
 	error?: {
 		status?: number;
 		message?: string;
@@ -9,13 +9,13 @@ interface AuthErrorLike {
 		retryAfter?: number;
 		data?: { retryAfter?: number };
 	};
-}
+};
 
-interface ParsedAuthError {
+type ParsedAuthError = {
 	isRateLimited: boolean;
 	retryAfter: number | null;
 	message: string;
-}
+};
 
 export function parseAuthError(error: AuthErrorLike): ParsedAuthError {
 	const status = error?.error?.status;

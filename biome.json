@@ -26,6 +26,9 @@
 			"!**/.svelte-kit",
 			"!**/wrangler.jsonc",
 			"!**/.source",
+			"!apps/web/src/router.tsx",
+			"!**/packages/infra",
+			"!**/packages/env",
 			"!**/convex/_generated"
 		]
 	},

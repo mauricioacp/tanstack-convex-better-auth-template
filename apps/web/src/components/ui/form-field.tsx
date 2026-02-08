@@ -10,7 +10,7 @@ type AnyForm = {
 	Subscribe: React.ComponentType<any>;
 };
 
-interface FormFieldProps {
+type FormFieldProps = {
 	form: AnyForm;
 	name: string;
 	label: string;
@@ -18,7 +18,7 @@ interface FormFieldProps {
 	placeholder?: string;
 	inputMode?: "numeric" | "text" | "email" | "tel" | "search" | "url";
 	children?: ReactNode;
-}
+};
 
 function FormField({
 	form,

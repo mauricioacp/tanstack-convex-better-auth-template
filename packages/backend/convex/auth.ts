@@ -13,8 +13,16 @@ import { resetPasswordEmailHtml } from "./emails/resetPassword";
 import { rateLimiter } from "./rateLimit";
 import { resend } from "./resend";
 
-const siteUrl = process.env.SITE_URL!;
-const emailFrom = process.env.RESEND_FROM!;
+const siteUrl = process.env.SITE_URL as string;
+const emailFrom = process.env.RESEND_FROM as string;
+
+if (!siteUrl) {
+	throw new Error("SITE_URL must be set");
+}
+
+if (!emailFrom) {
+	throw new Error("RESEND_FROM must be set");
+}
 
 export const authComponent = createClient<DataModel>(components.betterAuth);
 
