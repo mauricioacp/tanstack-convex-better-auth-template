@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
-import VerifyEmailForm from "@/components/verify-email-form";
+import VerifyEmailForm from "@/features/auth/components/verify-email-form";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/(auth)/verify-email")({
 	validateSearch: z.object({
 		email: z.email(),
 	}),
+	head: () => seo({ title: "Verificar email" }),
 	component: VerifyEmailPage,
 });
 

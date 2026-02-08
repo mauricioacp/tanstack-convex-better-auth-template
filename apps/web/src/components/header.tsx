@@ -1,6 +1,6 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 
-import UserMenu from "@/components/user-menu";
+import UserMenu from "@/features/auth/components/user-menu";
 
 import { buttonVariants } from "./ui/button";
 

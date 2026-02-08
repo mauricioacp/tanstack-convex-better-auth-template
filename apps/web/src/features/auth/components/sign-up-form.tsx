@@ -2,19 +2,17 @@ import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
-
-import { authClient } from "@/lib/auth-client";
-import { emailSchema, nameSchema, passwordSchema } from "@/lib/validations";
-
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "./ui/card";
-import { FormField } from "./ui/form-field";
+} from "@/components/ui/card";
+import { FormField } from "@/components/ui/form-field";
+import { authClient } from "@/lib/auth-client";
+import { emailSchema, nameSchema, passwordSchema } from "@/lib/validations";
 
 export default function SignUpForm() {
 	const navigate = useNavigate();

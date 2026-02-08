@@ -1,26 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { createRouterMock } from "@/test/mocks/router";
+
 let mockIsAuthenticated = false;
 
-vi.mock("@tanstack/react-router", () => ({
-	useRouteContext: () => ({ isAuthenticated: mockIsAuthenticated }),
-	Link: ({
-		to,
-		children,
-		...props
-	}: {
-		to: string;
-		children: React.ReactNode;
-		[key: string]: unknown;
-	}) => (
-		<a href={to} {...props}>
-			{children}
-		</a>
-	),
-}));
+vi.mock("@tanstack/react-router", () =>
+	createRouterMock({
+		get isAuthenticated() {
+			return mockIsAuthenticated;
+		},
+	}),
+);
 
-vi.mock("@/components/user-menu", () => ({
+vi.mock("@/features/auth/components/user-menu", () => ({
 	default: () => <div data-testid="user-menu">UserMenu</div>,
 }));
 

@@ -2,19 +2,17 @@ import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
-
-import { useCountdown } from "@/hooks/use-countdown";
-import { authClient } from "@/lib/auth-client";
-
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "./ui/card";
-import { FormField } from "./ui/form-field";
+} from "@/components/ui/card";
+import { FormField } from "@/components/ui/form-field";
+import { useCountdown } from "@/hooks/use-countdown";
+import { authClient } from "@/lib/auth-client";
 
 const RESEND_COOLDOWN = 60;
 

@@ -2,19 +2,17 @@ import { useForm } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import z from "zod";
-
-import { authClient } from "@/lib/auth-client";
-import { emailSchema } from "@/lib/validations";
-
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "./ui/card";
-import { FormField } from "./ui/form-field";
+} from "@/components/ui/card";
+import { FormField } from "@/components/ui/form-field";
+import { authClient } from "@/lib/auth-client";
+import { emailSchema } from "@/lib/validations";
 
 export default function ForgotPasswordForm() {
 	const [submitted, setSubmitted] = useState(false);
