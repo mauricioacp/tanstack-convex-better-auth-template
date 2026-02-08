@@ -236,3 +236,13 @@ bun run destroy    # tear down
 ```
 
 See [Deploying to Cloudflare with Alchemy](https://www.better-t-stack.dev/docs/guides/cloudflare-alchemy) for details.
+
+## Documentation
+
+For deeper guides, see the [`docs/`](./docs/) directory:
+
+- [Getting Started](./docs/getting-started.md) — Install, configure, and run
+- [Architecture](./docs/architecture.md) — How everything fits together
+- [Authentication](./docs/auth.md) — Auth flows, protection, and config
+- [Deployment](./docs/deployment.md) — Ship to production
+- [Customization](./docs/customization.md) — Add pages, functions, translations, tests
