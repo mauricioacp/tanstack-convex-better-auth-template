@@ -4,44 +4,40 @@ Full-stack TypeScript monorepo template built with [Better-T-Stack](https://gith
 
 ## Use as Template
 
-1. **Clone and rename:**
+### Option 1: GitHub Template
 
-   ```bash
-   git clone https://github.com/your-org/acme.git my-project
-   cd my-project
-   rm -rf .git && git init
-   ```
+Click **"Use this template"** on GitHub, then:
 
-2. **Install dependencies:**
+```bash
+git clone <your-new-repo-url>
+cd <repo>
+bun install && bun run init
+```
 
-   ```bash
-   bun install
-   ```
+### Option 2: degit (no git history)
 
-3. **Set up Convex** (follow prompts to create a project):
+```bash
+npx degit mauricioacp/tanstack-convex-better-auth-template my-project
+cd my-project
+bun install && bun run init
+```
 
-   ```bash
-   bun run dev:setup
-   ```
+### Option 3: gitpick
 
-4. **Configure env vars** — copy examples and fill in values:
+```bash
+npx gitpick mauricioacp/tanstack-convex-better-auth-template my-project
+cd my-project
+bun install && bun run init
+```
 
-   ```bash
-   cp apps/web/.env.example apps/web/.env
-   cp packages/backend/.env.local.example packages/backend/.env.local
-   ```
+### After init
 
-5. **Start developing:**
+```bash
+bun run dev:setup   # configure Convex (follow prompts)
+bun run dev         # start developing
+```
 
-   ```bash
-   bun run dev
-   ```
-
-6. **Create your first release:**
-
-   ```bash
-   bun run release:first
-   ```
+> **What does `bun run init` do?** It interactively renames all `@acme/` scopes, display names, and infra references to your chosen project name. It also resets versions, clears the changelog, and optionally reinitializes git. The init script self-deletes after running.
 
 ## Tech Stack
 
