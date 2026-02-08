@@ -1,9 +1,10 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"vcs": {
-		"enabled": false,
+		"enabled": true,
 		"clientKind": "git",
-		"useIgnoreFile": false
+		"useIgnoreFile": true,
+		"defaultBranch": "main"
 	},
 	"files": {
 		"ignoreUnknown": false,
@@ -32,10 +33,19 @@
 		"enabled": true,
 		"indentStyle": "tab"
 	},
-	"assist": { "actions": { "source": { "organizeImports": "on" } } },
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"suspicious": {
+				"useAwait": "off"
+			},
 			"recommended": true,
 			"correctness": {
 				"useExhaustiveDependencies": "info"
@@ -50,6 +60,13 @@
 				}
 			},
 			"style": {
+				"useConsistentTypeDefinitions": {
+					"options": {
+						"style": "type"
+					},
+					"level": "error"
+				},
+				"useFilenamingConvention": "off",
 				"noParameterAssign": "error",
 				"useAsConstAssertion": "error",
 				"useDefaultParameterLast": "error",
