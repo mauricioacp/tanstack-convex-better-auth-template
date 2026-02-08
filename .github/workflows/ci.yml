@@ -32,6 +32,7 @@ jobs:
         with:
           bun-version: "latest"
       - run: bun install --frozen-lockfile
+      - run: cd apps/web && bun run paraglide:compile
       - run: bun run check-types
 
   test:
@@ -43,6 +44,7 @@ jobs:
         with:
           bun-version: "latest"
       - run: bun install --frozen-lockfile
+      - run: cd apps/web && bun run paraglide:compile
       - run: cd apps/web && bunx vitest run
 
   build:
