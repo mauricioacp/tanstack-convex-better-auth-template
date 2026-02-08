@@ -15,6 +15,7 @@ import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as authVerifyEmailRouteImport } from './routes/(auth)/verify-email'
 import { Route as authAuthRouteImport } from './routes/(auth)/_auth'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as authAuthSignUpRouteImport } from './routes/(auth)/_auth/sign-up'
 import { Route as authAuthSignInRouteImport } from './routes/(auth)/_auth/sign-in'
 import { Route as authAuthResetPasswordRouteImport } from './routes/(auth)/_auth/reset-password'
@@ -49,6 +50,12 @@ const authAuthRoute = authAuthRouteImport.update({
   id: '/(auth)/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const authAuthSignUpRoute = authAuthSignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof authAuthResetPasswordRoute
   '/sign-in': typeof authAuthSignInRoute
   '/sign-up': typeof authAuthSignUpRoute
+  '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/api/auth/$': typeof authApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -95,6 +103,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof authAuthResetPasswordRoute
   '/sign-in': typeof authAuthSignInRoute
   '/sign-up': typeof authAuthSignUpRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
   '/api/auth/$': typeof authApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -109,6 +118,7 @@ export interface FileRoutesById {
   '/(auth)/_auth/reset-password': typeof authAuthResetPasswordRoute
   '/(auth)/_auth/sign-in': typeof authAuthSignInRoute
   '/(auth)/_auth/sign-up': typeof authAuthSignUpRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/(auth)/api/auth/$': typeof authApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
+    | '/settings/'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
+    | '/settings'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -146,6 +158,7 @@ export interface FileRouteTypes {
     | '/(auth)/_auth/reset-password'
     | '/(auth)/_auth/sign-in'
     | '/(auth)/_auth/sign-up'
+    | '/_authenticated/settings/'
     | '/(auth)/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -202,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/(auth)/_auth/sign-up': {
       id: '/(auth)/_auth/sign-up'
       path: '/sign-up'
@@ -242,10 +262,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
