@@ -2,7 +2,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockNavigate = vi.fn();
+import { createRouterMock, mockNavigate } from "@/test/mocks/router";
+import { createSonnerMock } from "@/test/mocks/sonner";
+
 const mockSignInEmail = vi.fn();
 
 vi.mock("@/lib/auth-client", () => ({
@@ -13,31 +15,11 @@ vi.mock("@/lib/auth-client", () => ({
 	},
 }));
 
-vi.mock("@tanstack/react-router", () => ({
-	useNavigate: () => mockNavigate,
-	Link: ({
-		to,
-		children,
-		...props
-	}: {
-		to: string;
-		children: React.ReactNode;
-		[key: string]: unknown;
-	}) => (
-		<a href={to} {...props}>
-			{children}
-		</a>
-	),
-}));
+vi.mock("@tanstack/react-router", () => createRouterMock());
 
-vi.mock("sonner", () => ({
-	toast: {
-		success: vi.fn(),
-		error: vi.fn(),
-	},
-}));
+vi.mock("sonner", () => createSonnerMock());
 
-import SignInForm from "../sign-in-form";
+import SignInForm from "../components/sign-in-form";
 
 describe("SignInForm", () => {
 	beforeEach(() => {

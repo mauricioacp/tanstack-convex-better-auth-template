@@ -2,7 +2,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockNavigate = vi.fn();
+import { createRouterMock, mockNavigate } from "@/test/mocks/router";
+import { createSonnerMock } from "@/test/mocks/sonner";
+
 const mockVerifyEmail = vi.fn();
 const mockSendVerificationOtp = vi.fn();
 
@@ -16,18 +18,11 @@ vi.mock("@/lib/auth-client", () => ({
 	},
 }));
 
-vi.mock("@tanstack/react-router", () => ({
-	useNavigate: () => mockNavigate,
-}));
+vi.mock("@tanstack/react-router", () => createRouterMock());
 
-vi.mock("sonner", () => ({
-	toast: {
-		success: vi.fn(),
-		error: vi.fn(),
-	},
-}));
+vi.mock("sonner", () => createSonnerMock());
 
-import VerifyEmailForm from "../verify-email-form";
+import VerifyEmailForm from "../components/verify-email-form";
 
 describe("VerifyEmailForm", () => {
 	const testEmail = "test@example.com";

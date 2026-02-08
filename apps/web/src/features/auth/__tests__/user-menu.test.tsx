@@ -2,9 +2,10 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { mockNavigate } from "@/test/mocks/router";
+
 let mockUser: { name: string; email: string } | undefined;
 const mockSignOut = vi.fn();
-const mockNavigate = vi.fn();
 
 vi.mock("convex/react", () => ({
 	useQuery: () => mockUser,
@@ -28,7 +29,7 @@ vi.mock("@tanstack/react-router", () => ({
 	useNavigate: () => mockNavigate,
 }));
 
-import UserMenu from "../user-menu";
+import UserMenu from "../components/user-menu";
 
 describe("UserMenu", () => {
 	beforeEach(() => {

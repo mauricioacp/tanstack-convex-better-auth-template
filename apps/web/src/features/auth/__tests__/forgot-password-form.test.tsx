@@ -2,6 +2,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { createRouterMock } from "@/test/mocks/router";
+import { createSonnerMock } from "@/test/mocks/sonner";
+
 const mockRequestPasswordReset = vi.fn();
 
 vi.mock("@/lib/auth-client", () => ({
@@ -11,31 +14,11 @@ vi.mock("@/lib/auth-client", () => ({
 	},
 }));
 
-vi.mock("@tanstack/react-router", () => ({
-	useNavigate: () => vi.fn(),
-	Link: ({
-		to,
-		children,
-		...props
-	}: {
-		to: string;
-		children: React.ReactNode;
-		[key: string]: unknown;
-	}) => (
-		<a href={to} {...props}>
-			{children}
-		</a>
-	),
-}));
+vi.mock("@tanstack/react-router", () => createRouterMock());
 
-vi.mock("sonner", () => ({
-	toast: {
-		success: vi.fn(),
-		error: vi.fn(),
-	},
-}));
+vi.mock("sonner", () => createSonnerMock());
 
-import ForgotPasswordForm from "../forgot-password-form";
+import ForgotPasswordForm from "../components/forgot-password-form";
 
 describe("ForgotPasswordForm", () => {
 	beforeEach(() => {
