@@ -104,10 +104,12 @@ export function getTargetFiles(): string[] {
 		"packages/env/tsconfig.json",
 		"apps/web/src/router.tsx",
 		"apps/web/src/lib/auth-server.ts",
-		"apps/web/src/routes/index.tsx",
-		"apps/web/src/routes/dashboard.tsx",
-		"apps/web/src/components/user-menu.tsx",
-		"apps/web/src/components/__tests__/user-menu.test.tsx",
+		"apps/web/src/routes/_authenticated/dashboard.tsx",
+		"apps/web/src/features/auth/components/user-menu.tsx",
+		"apps/web/src/features/auth/__tests__/user-menu.test.tsx",
+		"apps/web/src/routes/_authenticated/settings/index.tsx",
+		"apps/web/src/features/landing/components/contact-form.tsx",
+		"apps/web/src/features/landing/__tests__/contact-form.test.tsx",
 		"CLAUDE.md",
 
 		// Group B — Display name (Acme -> {displayName})
@@ -115,6 +117,12 @@ export function getTargetFiles(): string[] {
 		"packages/backend/convex/auth.ts",
 		"packages/backend/convex/emails/otpVerification.ts",
 		"packages/backend/convex/emails/resetPassword.ts",
+		"apps/web/src/features/landing/components/footer.tsx",
+		"apps/web/src/features/landing/__tests__/footer.test.tsx",
+		"apps/web/src/routes/index.tsx",
+		"apps/web/src/lib/seo.ts",
+		"apps/web/src/lib/__tests__/seo.test.ts",
+		"packages/backend/convex/emails/contactNotification.ts",
 		"README.md",
 
 		// Group D — Infra
@@ -168,10 +176,12 @@ export function buildReplacementPlan(config: InitConfig): ReplacementEntry[] {
 	const scopeSourceFiles = [
 		"apps/web/src/router.tsx",
 		"apps/web/src/lib/auth-server.ts",
-		"apps/web/src/routes/index.tsx",
-		"apps/web/src/routes/dashboard.tsx",
-		"apps/web/src/components/user-menu.tsx",
-		"apps/web/src/components/__tests__/user-menu.test.tsx",
+		"apps/web/src/routes/_authenticated/dashboard.tsx",
+		"apps/web/src/features/auth/components/user-menu.tsx",
+		"apps/web/src/features/auth/__tests__/user-menu.test.tsx",
+		"apps/web/src/routes/_authenticated/settings/index.tsx",
+		"apps/web/src/features/landing/components/contact-form.tsx",
+		"apps/web/src/features/landing/__tests__/contact-form.test.tsx",
 	];
 	for (const file of scopeSourceFiles) {
 		plan.push({ file, replacements: [scopeReplace] });
@@ -181,22 +191,21 @@ export function buildReplacementPlan(config: InitConfig): ReplacementEntry[] {
 	plan.push({ file: "CLAUDE.md", replacements: [scopeReplace] });
 
 	// Group B — display name
-	plan.push({
-		file: "apps/web/src/routes/__root.tsx",
-		replacements: [displayReplace],
-	});
-	plan.push({
-		file: "packages/backend/convex/auth.ts",
-		replacements: [displayReplace],
-	});
-	plan.push({
-		file: "packages/backend/convex/emails/otpVerification.ts",
-		replacements: [displayReplace],
-	});
-	plan.push({
-		file: "packages/backend/convex/emails/resetPassword.ts",
-		replacements: [displayReplace],
-	});
+	const displayNameFiles = [
+		"apps/web/src/routes/__root.tsx",
+		"packages/backend/convex/auth.ts",
+		"packages/backend/convex/emails/otpVerification.ts",
+		"packages/backend/convex/emails/resetPassword.ts",
+		"apps/web/src/features/landing/components/footer.tsx",
+		"apps/web/src/features/landing/__tests__/footer.test.tsx",
+		"apps/web/src/routes/index.tsx",
+		"apps/web/src/lib/seo.ts",
+		"apps/web/src/lib/__tests__/seo.test.ts",
+		"packages/backend/convex/emails/contactNotification.ts",
+	];
+	for (const file of displayNameFiles) {
+		plan.push({ file, replacements: [displayReplace] });
+	}
 
 	// README — display name + project structure diagram
 	plan.push({

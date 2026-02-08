@@ -192,6 +192,53 @@ describe("getTargetFiles", () => {
 		const files = getTargetFiles();
 		expect(files.every((f) => !f.endsWith("bun.lock"))).toBe(true);
 	});
+
+	it("should reference refactored file paths", () => {
+		const files = getTargetFiles();
+		// Moved files should use new paths
+		expect(files).toContain("apps/web/src/routes/_authenticated/dashboard.tsx");
+		expect(files).toContain(
+			"apps/web/src/features/auth/components/user-menu.tsx",
+		);
+		expect(files).toContain(
+			"apps/web/src/features/auth/__tests__/user-menu.test.tsx",
+		);
+		// Old paths should not exist
+		expect(files).not.toContain("apps/web/src/routes/dashboard.tsx");
+		expect(files).not.toContain("apps/web/src/components/user-menu.tsx");
+		expect(files).not.toContain(
+			"apps/web/src/components/__tests__/user-menu.test.tsx",
+		);
+	});
+
+	it("should include new scope files", () => {
+		const files = getTargetFiles();
+		expect(files).toContain(
+			"apps/web/src/routes/_authenticated/settings/index.tsx",
+		);
+		expect(files).toContain(
+			"apps/web/src/features/landing/components/contact-form.tsx",
+		);
+		expect(files).toContain(
+			"apps/web/src/features/landing/__tests__/contact-form.test.tsx",
+		);
+	});
+
+	it("should include new display name files", () => {
+		const files = getTargetFiles();
+		expect(files).toContain(
+			"apps/web/src/features/landing/components/footer.tsx",
+		);
+		expect(files).toContain(
+			"apps/web/src/features/landing/__tests__/footer.test.tsx",
+		);
+		expect(files).toContain("apps/web/src/routes/index.tsx");
+		expect(files).toContain("apps/web/src/lib/seo.ts");
+		expect(files).toContain("apps/web/src/lib/__tests__/seo.test.ts");
+		expect(files).toContain(
+			"packages/backend/convex/emails/contactNotification.ts",
+		);
+	});
 });
 
 describe("buildReplacementPlan", () => {
@@ -264,5 +311,74 @@ describe("buildReplacementPlan", () => {
 				([from, to]) => from === '"name": "acme"' && to === '"name": "my-saas"',
 			),
 		).toBe(true);
+	});
+
+	it("should generate scope replacements for refactored source files", () => {
+		const config: InitConfig = {
+			name: "my-saas",
+			displayName: "My SaaS",
+		};
+		const plan = buildReplacementPlan(config);
+
+		const scopeFiles = [
+			"apps/web/src/routes/_authenticated/dashboard.tsx",
+			"apps/web/src/features/auth/components/user-menu.tsx",
+			"apps/web/src/features/auth/__tests__/user-menu.test.tsx",
+			"apps/web/src/routes/_authenticated/settings/index.tsx",
+			"apps/web/src/features/landing/components/contact-form.tsx",
+			"apps/web/src/features/landing/__tests__/contact-form.test.tsx",
+		];
+
+		for (const file of scopeFiles) {
+			const entry = plan.find((e) => e.file === file);
+			expect(entry).toBeDefined();
+			expect(
+				entry?.replacements.some(
+					([from, to]) => from === "@acme/" && to === "@my-saas/",
+				),
+			).toBe(true);
+		}
+	});
+
+	it("should generate display name replacements for new display files", () => {
+		const config: InitConfig = {
+			name: "my-saas",
+			displayName: "My SaaS",
+		};
+		const plan = buildReplacementPlan(config);
+
+		const displayFiles = [
+			"apps/web/src/features/landing/components/footer.tsx",
+			"apps/web/src/features/landing/__tests__/footer.test.tsx",
+			"apps/web/src/routes/index.tsx",
+			"apps/web/src/lib/seo.ts",
+			"apps/web/src/lib/__tests__/seo.test.ts",
+			"packages/backend/convex/emails/contactNotification.ts",
+		];
+
+		for (const file of displayFiles) {
+			const entry = plan.find((e) => e.file === file);
+			expect(entry).toBeDefined();
+			expect(
+				entry?.replacements.some(
+					([from, to]) => from === "Acme" && to === "My SaaS",
+				),
+			).toBe(true);
+		}
+	});
+
+	it("should not reference stale pre-refactor paths", () => {
+		const config: InitConfig = {
+			name: "my-saas",
+			displayName: "My SaaS",
+		};
+		const plan = buildReplacementPlan(config);
+		const files = plan.map((e) => e.file);
+
+		expect(files).not.toContain("apps/web/src/routes/dashboard.tsx");
+		expect(files).not.toContain("apps/web/src/components/user-menu.tsx");
+		expect(files).not.toContain(
+			"apps/web/src/components/__tests__/user-menu.test.tsx",
+		);
 	});
 });
