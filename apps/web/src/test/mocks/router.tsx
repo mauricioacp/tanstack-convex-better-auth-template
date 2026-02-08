@@ -16,19 +16,21 @@ export function createRouterMock(
 	contextOverrides: Record<string, unknown> = {},
 	options: RouterMockOptions = {},
 ) {
-	const location = {
-		pathname: "/",
-		search: {},
-		searchStr: "",
-		hash: "",
-		href: undefined,
-		...options.location,
-	};
-	if (!location.href) {
-		const search =
-			location.searchStr ??
-			(typeof location.search === "string" ? location.search : "");
-		location.href = `${location.pathname}${search}${location.hash}`;
+	function getLocation() {
+		const loc = {
+			pathname: "/",
+			search: {},
+			searchStr: "",
+			hash: "",
+			href: undefined as string | undefined,
+			...options.location,
+		};
+		if (!loc.href) {
+			const search =
+				loc.searchStr ?? (typeof loc.search === "string" ? loc.search : "");
+			loc.href = `${loc.pathname}${search}${loc.hash}`;
+		}
+		return loc;
 	}
 
 	return {
@@ -40,8 +42,8 @@ export function createRouterMock(
 		useRouterState: ({
 			select,
 		}: {
-			select: (state: { location: typeof location }) => unknown;
-		}) => select({ location }),
+			select: (state: { location: ReturnType<typeof getLocation> }) => unknown;
+		}) => select({ location: getLocation() }),
 		Link: ({
 			to,
 			href,

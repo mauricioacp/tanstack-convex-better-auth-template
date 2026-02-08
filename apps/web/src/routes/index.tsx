@@ -23,8 +23,10 @@ function LandingPage() {
 	return (
 		<div className="min-h-screen">
 			<Hero />
+			<div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 			<FeaturesGrid />
 			<TechStack />
+			<div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 			<Testimonials />
 			<Pricing />
 			<ContactForm />

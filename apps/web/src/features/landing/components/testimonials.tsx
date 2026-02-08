@@ -1,4 +1,4 @@
-import { QuoteIcon } from "lucide-react";
+import { StarIcon } from "lucide-react";
 
 import * as m from "@/paraglide/messages";
 
@@ -37,17 +37,38 @@ export function Testimonials() {
 					{testimonials.map((testimonial) => (
 						<div
 							key={testimonial.name()}
-							className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5"
+							className="flex flex-col gap-5 rounded-xl border border-border bg-card p-8 shadow-sm transition-shadow hover:shadow-md"
 						>
-							<QuoteIcon className="size-5 text-primary/40" />
-							<p className="flex-1 text-muted-foreground text-xs italic leading-relaxed">
+							{/* Star rating */}
+							<div className="flex gap-1">
+								{Array.from({ length: 5 }).map((_, i) => (
+									<StarIcon
+										key={`star-${testimonial.name()}-${i}`}
+										className="size-4 fill-primary text-primary"
+									/>
+								))}
+							</div>
+
+							{/* Quote */}
+							<p className="flex-1 text-foreground text-sm italic leading-relaxed">
 								&ldquo;{testimonial.quote()}&rdquo;
 							</p>
-							<div className="border-border border-t pt-4">
-								<p className="font-semibold text-xs">{testimonial.name()}</p>
-								<p className="text-[10px] text-muted-foreground">
-									{testimonial.title()}
-								</p>
+
+							{/* Author with avatar */}
+							<div className="flex items-center gap-3 border-border border-t pt-5">
+								<div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary text-xs">
+									{testimonial
+										.name()
+										.split(" ")
+										.map((n) => n[0])
+										.join("")}
+								</div>
+								<div>
+									<p className="font-semibold text-sm">{testimonial.name()}</p>
+									<p className="text-muted-foreground text-xs">
+										{testimonial.title()}
+									</p>
+								</div>
 							</div>
 						</div>
 					))}

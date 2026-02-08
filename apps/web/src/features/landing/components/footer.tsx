@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { GithubIcon } from "lucide-react";
 
 import * as m from "@/paraglide/messages";
 
@@ -26,30 +27,42 @@ const resourceLinks = [
 
 export function Footer() {
 	return (
-		<footer className="border-border border-t px-4 py-12">
-			<div className="mx-auto max-w-5xl">
-				<div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+		<footer className="border-border border-t bg-muted/20 px-4 py-16">
+			<div className="mx-auto max-w-6xl">
+				<div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
 					{/* Brand */}
 					<div>
-						<Link to="/" className="font-bold text-sm tracking-tight">
+						<Link to="/" className="font-bold text-base tracking-tight">
 							Acme
 						</Link>
-						<p className="mt-2 max-w-xs text-muted-foreground text-xs leading-relaxed">
+						<p className="mt-3 max-w-xs text-muted-foreground text-sm leading-relaxed">
 							{m.landing_footer_description()}
 						</p>
+						{/* Social links */}
+						<div className="mt-4 flex gap-3">
+							<a
+								href="https://github.com"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-muted-foreground transition-colors hover:text-foreground"
+								aria-label="GitHub"
+							>
+								<GithubIcon className="size-5" />
+							</a>
+						</div>
 					</div>
 
 					{/* Product links */}
 					<div>
-						<h4 className="mb-3 font-semibold text-xs">
+						<h4 className="mb-3 font-semibold text-sm">
 							{m.landing_footer_product()}
 						</h4>
-						<ul className="space-y-2">
+						<ul className="space-y-3">
 							{productLinks.map((link) => (
 								<li key={link.href}>
 									<a
 										href={link.href}
-										className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+										className="text-muted-foreground text-sm transition-colors hover:text-foreground"
 									>
 										{link.label()}
 									</a>
@@ -60,10 +73,10 @@ export function Footer() {
 
 					{/* Resource links */}
 					<div>
-						<h4 className="mb-3 font-semibold text-xs">
+						<h4 className="mb-3 font-semibold text-sm">
 							{m.landing_footer_resources()}
 						</h4>
-						<ul className="space-y-2">
+						<ul className="space-y-3">
 							{resourceLinks.map((link) => (
 								<li key={link.key}>
 									{link.external ? (
@@ -71,14 +84,14 @@ export function Footer() {
 											href={link.href}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+											className="text-muted-foreground text-sm transition-colors hover:text-foreground"
 										>
 											{link.label()}
 										</a>
 									) : (
 										<a
 											href={link.href}
-											className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+											className="text-muted-foreground text-sm transition-colors hover:text-foreground"
 										>
 											{link.label()}
 										</a>
@@ -90,7 +103,7 @@ export function Footer() {
 				</div>
 
 				{/* Bottom bar */}
-				<div className="mt-10 border-border border-t pt-6 text-center text-[10px] text-muted-foreground">
+				<div className="mt-12 border-border border-t pt-8 text-center text-muted-foreground text-xs">
 					&copy; {new Date().getFullYear()} Acme. {m.landing_footer_rights()}
 				</div>
 			</div>

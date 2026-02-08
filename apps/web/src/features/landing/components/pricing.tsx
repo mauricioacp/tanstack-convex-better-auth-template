@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { CheckIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
 
 const plans = [
@@ -53,12 +54,20 @@ export function Pricing() {
 					{plans.map((plan) => (
 						<div
 							key={plan.title()}
-							className={`flex flex-col rounded-xl border p-6 ${
+							className={cn(
+								"relative flex flex-col rounded-xl border p-8 transition-shadow hover:shadow-lg",
 								plan.highlighted
-									? "border-primary bg-primary/5 ring-1 ring-primary/20"
-									: "border-border bg-card"
-							}`}
+									? "border-primary bg-gradient-to-b from-primary/5 to-transparent shadow-md ring-2 ring-primary/20"
+									: "border-border bg-card",
+							)}
 						>
+							{/* Popular badge */}
+							{plan.highlighted && (
+								<div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground text-xs">
+									{m.landing_pricing_popular_badge()}
+								</div>
+							)}
+
 							<div className="mb-6">
 								<h3 className="mb-1 font-semibold text-sm">{plan.title()}</h3>
 								<div className="flex items-baseline gap-1">
@@ -80,9 +89,9 @@ export function Pricing() {
 								{plan.features.map((feature) => (
 									<li
 										key={feature()}
-										className="flex items-center gap-2 text-xs"
+										className="flex items-center gap-2 text-sm"
 									>
-										<CheckIcon className="size-3.5 text-primary" />
+										<CheckIcon className="size-4 text-primary" />
 										{feature()}
 									</li>
 								))}

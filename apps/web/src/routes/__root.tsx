@@ -74,7 +74,9 @@ function RootDocument() {
 					<body>
 						<div className="grid h-svh grid-rows-[auto_1fr]">
 							<Header />
-							<Outlet />
+							<div className={context.isAuthenticated ? "" : "pt-20"}>
+								<Outlet />
+							</div>
 						</div>
 						<Toaster richColors />
 						<TanStackRouterDevtools position="bottom-left" />

@@ -1,12 +1,37 @@
+import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
 
 const techStack = [
-	{ name: "React 19", description: "UI Library" },
-	{ name: "TanStack Start", description: "SSR Framework" },
-	{ name: "Convex", description: "Backend Platform" },
-	{ name: "Better Auth", description: "Authentication" },
-	{ name: "Tailwind CSS v4", description: "Styling" },
-	{ name: "TypeScript", description: "Language" },
+	{
+		name: "React 19",
+		description: "UI Library",
+		color: "bg-[#61dafb]/10 text-[#61dafb]",
+	},
+	{
+		name: "TanStack Start",
+		description: "SSR Framework",
+		color: "bg-orange-500/10 text-orange-500",
+	},
+	{
+		name: "Convex",
+		description: "Backend Platform",
+		color: "bg-primary/10 text-primary",
+	},
+	{
+		name: "Better Auth",
+		description: "Authentication",
+		color: "bg-green-500/10 text-green-500",
+	},
+	{
+		name: "Tailwind CSS v4",
+		description: "Styling",
+		color: "bg-cyan-500/10 text-cyan-500",
+	},
+	{
+		name: "TypeScript",
+		description: "Language",
+		color: "bg-blue-600/10 text-blue-600",
+	},
 ];
 
 export function TechStack() {
@@ -26,14 +51,18 @@ export function TechStack() {
 					{techStack.map((tech) => (
 						<div
 							key={tech.name}
-							className="group flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-4 text-center transition-colors hover:border-primary/40 hover:bg-muted/40"
+							className="group flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md motion-safe:hover:scale-105"
 						>
-							{/* Monogram circle */}
-							<div className="flex size-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary text-sm">
+							<div
+								className={cn(
+									"flex size-12 items-center justify-center rounded-full font-bold text-base",
+									tech.color,
+								)}
+							>
 								{tech.name.charAt(0)}
 							</div>
-							<span className="font-medium text-xs">{tech.name}</span>
-							<span className="text-[10px] text-muted-foreground">
+							<span className="font-semibold text-sm">{tech.name}</span>
+							<span className="text-muted-foreground text-xs">
 								{tech.description}
 							</span>
 						</div>
