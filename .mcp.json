@@ -1,0 +1,16 @@
+{
+	"mcpServers": {
+		"shadcn": {
+			"command": "npx",
+			"args": ["shadcn@latest", "mcp"]
+		},
+		"tanstack": {
+			"command": "npx",
+			"args": ["@tanstack/cli", "mcp"]
+		},
+		"zread": {
+			"command": "npx",
+			"args": ["-y", "zread-mcp"]
+		}
+	}
+}

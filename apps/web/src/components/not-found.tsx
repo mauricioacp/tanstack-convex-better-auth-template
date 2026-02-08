@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
+import * as m from "@/paraglide/messages";
+
 import { buttonVariants } from "./ui/button";
 import {
 	Card,
@@ -14,14 +16,12 @@ export default function NotFound() {
 		<div className="flex min-h-[50vh] items-center justify-center">
 			<Card className="w-full max-w-md text-center">
 				<CardHeader>
-					<CardTitle>Page not found</CardTitle>
-					<CardDescription>
-						The page you're looking for doesn't exist or has been moved.
-					</CardDescription>
+					<CardTitle>{m.page_not_found()}</CardTitle>
+					<CardDescription>{m.page_not_found_description()}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Link to="/" className={buttonVariants()}>
-						Go Home
+						{m.go_home()}
 					</Link>
 				</CardContent>
 			</Card>

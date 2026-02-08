@@ -17,6 +17,10 @@ vi.mock("@/features/auth/components/user-menu", () => ({
 	default: () => <div data-testid="user-menu">UserMenu</div>,
 }));
 
+vi.mock("@/lib/theme-provider", () => ({
+	useTheme: () => ({ theme: "system", setTheme: vi.fn() }),
+}));
+
 import Header from "../header";
 
 describe("Header", () => {
@@ -60,7 +64,7 @@ describe("Header", () => {
 			mockIsAuthenticated = true;
 		});
 
-		it("should render Home and Dashboard links", () => {
+		it("should render Home, Dashboard, and Settings links", () => {
 			render(<Header />);
 			expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
 				"href",
@@ -69,6 +73,10 @@ describe("Header", () => {
 			expect(screen.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
 				"href",
 				"/dashboard",
+			);
+			expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute(
+				"href",
+				"/settings",
 			);
 		});
 

@@ -2,9 +2,10 @@ type SeoOptions = {
 	title?: string;
 	description?: string;
 	image?: string;
+	path?: string;
 };
 
-export function seo({ title, description, image }: SeoOptions) {
+export function seo({ title, description, image, path }: SeoOptions) {
 	const fullTitle = title ? `${title} | Acme` : "Acme";
 	return {
 		meta: [
@@ -18,5 +19,12 @@ export function seo({ title, description, image }: SeoOptions) {
 				: []),
 			...(image ? [{ property: "og:image", content: image }] : []),
 		],
+		links: path
+			? [
+					{ rel: "alternate", hrefLang: "en", href: path },
+					{ rel: "alternate", hrefLang: "es", href: `/es${path}` },
+					{ rel: "alternate", hrefLang: "x-default", href: path },
+				]
+			: [],
 	};
 }

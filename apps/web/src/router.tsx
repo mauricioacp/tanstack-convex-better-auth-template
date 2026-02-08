@@ -3,36 +3,14 @@ import { ConvexQueryClient } from "@convex-dev/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
+import { deLocalizeUrl, localizeUrl } from "./paraglide/runtime.js";
 
+import { ErrorBoundary } from "./components/error-boundary";
 import Loader from "./components/loader";
 import NotFound from "./components/not-found";
 import "./index.css";
 
-import { Button } from "./components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "./components/ui/card";
 import { routeTree } from "./routeTree.gen";
-
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-	return (
-		<div className="flex min-h-[50vh] items-center justify-center">
-			<Card className="w-full max-w-md text-center">
-				<CardHeader>
-					<CardTitle>Something went wrong</CardTitle>
-					<CardDescription>{error.message}</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<Button onClick={reset}>Try Again</Button>
-				</CardContent>
-			</Card>
-		</div>
-	);
-}
 
 export function getRouter() {
 	const convexUrl = env.VITE_CONVEX_URL;
@@ -55,10 +33,14 @@ export function getRouter() {
 	const router = createTanStackRouter({
 		routeTree,
 		defaultPreload: "intent",
+		rewrite: {
+			input: ({ url }) => deLocalizeUrl(url),
+			output: ({ url }) => localizeUrl(url),
+		},
 		defaultPendingComponent: () => <Loader />,
 		defaultNotFoundComponent: () => <NotFound />,
 		defaultErrorComponent: ({ error, reset }) => (
-			<ErrorComponent error={error} reset={reset} />
+			<ErrorBoundary error={error} reset={reset} />
 		),
 		context: { queryClient, convexQueryClient },
 	});

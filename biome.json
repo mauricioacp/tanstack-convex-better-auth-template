@@ -29,7 +29,8 @@
 			"!apps/web/src/router.tsx",
 			"!**/packages/infra",
 			"!**/packages/env",
-			"!**/convex/_generated"
+			"!**/convex/_generated",
+			"!**/src/paraglide"
 		]
 	},
 	"formatter": {

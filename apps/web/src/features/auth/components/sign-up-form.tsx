@@ -13,6 +13,7 @@ import {
 import { FormField } from "@/components/ui/form-field";
 import { authClient } from "@/lib/auth-client";
 import { emailSchema, nameSchema, passwordSchema } from "@/lib/validations";
+import * as m from "@/paraglide/messages";
 
 export default function SignUpForm() {
 	const navigate = useNavigate();
@@ -36,9 +37,7 @@ export default function SignUpForm() {
 							to: "/verify-email",
 							search: { email: value.email },
 						});
-						toast.success(
-							"Account created! Check your email for a verification code.",
-						);
+						toast.success(m.account_created());
 					},
 					onError: (error) => {
 						toast.error(error.error.message || error.error.statusText);
@@ -58,8 +57,8 @@ export default function SignUpForm() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Create Account</CardTitle>
-				<CardDescription>Sign up for a new account</CardDescription>
+				<CardTitle>{m.create_account()}</CardTitle>
+				<CardDescription>{m.sign_up_description()}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<form
@@ -70,12 +69,17 @@ export default function SignUpForm() {
 					}}
 					className="space-y-4"
 				>
-					<FormField form={form} name="name" label="Name" />
-					<FormField form={form} name="email" label="Email" type="email" />
+					<FormField form={form} name="name" label={m.name_label()} />
+					<FormField
+						form={form}
+						name="email"
+						label={m.email_label()}
+						type="email"
+					/>
 					<FormField
 						form={form}
 						name="password"
-						label="Password"
+						label={m.password_label()}
 						type="password"
 					/>
 
@@ -87,16 +91,16 @@ export default function SignUpForm() {
 								loading={state.isSubmitting}
 								disabled={!state.canSubmit}
 							>
-								Sign Up
+								{m.sign_up()}
 							</Button>
 						)}
 					</form.Subscribe>
 				</form>
 
 				<div className="mt-4 text-center text-xs">
-					Already have an account?{" "}
+					{m.have_account()}{" "}
 					<Link to="/sign-in" className="underline underline-offset-4">
-						Sign In
+						{m.sign_in()}
 					</Link>
 				</div>
 			</CardContent>

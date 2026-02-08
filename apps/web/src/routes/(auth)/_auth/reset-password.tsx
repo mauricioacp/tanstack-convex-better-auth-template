@@ -3,6 +3,7 @@ import z from "zod";
 
 import ResetPasswordForm from "@/features/auth/components/reset-password-form";
 import { seo } from "@/lib/seo";
+import * as m from "@/paraglide/messages";
 
 const searchSchema = z.object({
 	token: z.string(),
@@ -10,7 +11,7 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/(auth)/_auth/reset-password")({
 	validateSearch: searchSchema,
-	head: () => seo({ title: "Restablecer contraseña" }),
+	head: () => seo({ title: m.seo_reset_password(), path: "/reset-password" }),
 	component: ResetPasswordPage,
 });
 

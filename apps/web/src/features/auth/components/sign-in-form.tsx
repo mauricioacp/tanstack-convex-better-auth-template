@@ -16,6 +16,7 @@ import { useCountdown } from "@/hooks/use-countdown";
 import { authClient } from "@/lib/auth-client";
 import { parseAuthError } from "@/lib/rate-limit";
 import { emailSchema, passwordSchema } from "@/lib/validations";
+import * as m from "@/paraglide/messages";
 
 export default function SignInForm() {
 	const navigate = useNavigate();
@@ -38,13 +39,15 @@ export default function SignInForm() {
 						navigate({
 							to: "/dashboard",
 						});
-						toast.success("Sign in successful");
+						toast.success(m.sign_in_success());
 					},
 					onError: (error) => {
 						const parsed = parseAuthError(error);
 						if (parsed.isRateLimited) {
 							setRateLimitMessage(
-								`Too many attempts. Try again in ${parsed.retryAfter}s.`,
+								m.too_many_attempts({
+									seconds: String(parsed.retryAfter),
+								}),
 							);
 							startCountdown(parsed?.retryAfter as number);
 						} else {
@@ -67,8 +70,8 @@ export default function SignInForm() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Welcome Back</CardTitle>
-				<CardDescription>Sign in to your account</CardDescription>
+				<CardTitle>{m.welcome_back()}</CardTitle>
+				<CardDescription>{m.sign_in_description()}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<form
@@ -82,24 +85,31 @@ export default function SignInForm() {
 					{rateLimitMessage && (
 						<p className="text-destructive text-xs">
 							{isRateLimited
-								? `Too many attempts. Try again in ${secondsLeft}s.`
+								? m.too_many_attempts({
+										seconds: String(secondsLeft),
+									})
 								: rateLimitMessage}
 						</p>
 					)}
 
-					<FormField form={form} name="email" label="Email" type="email" />
+					<FormField
+						form={form}
+						name="email"
+						label={m.email_label()}
+						type="email"
+					/>
 
 					<FormField
 						form={form}
 						name="password"
-						label="Password"
+						label={m.password_label()}
 						type="password"
 					>
 						<Link
 							to="/forgot-password"
 							className="text-muted-foreground text-xs hover:underline"
 						>
-							Forgot password?
+							{m.forgot_password_link()}
 						</Link>
 					</FormField>
 
@@ -111,16 +121,16 @@ export default function SignInForm() {
 								loading={state.isSubmitting}
 								disabled={!state.canSubmit || isRateLimited}
 							>
-								Sign In
+								{m.sign_in()}
 							</Button>
 						)}
 					</form.Subscribe>
 				</form>
 
 				<div className="mt-4 text-center text-xs">
-					Don&apos;t have an account?{" "}
+					{m.no_account()}{" "}
 					<Link to="/sign-up" className="underline underline-offset-4">
-						Sign Up
+						{m.sign_up()}
 					</Link>
 				</div>
 			</CardContent>

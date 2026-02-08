@@ -12,6 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import * as m from "@/paraglide/messages";
 
 export default function UserMenu() {
 	const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function UserMenu() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="bg-card">
 				<DropdownMenuGroup>
-					<DropdownMenuLabel>My Account</DropdownMenuLabel>
+					<DropdownMenuLabel>{m.my_account()}</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem>{user?.email}</DropdownMenuItem>
 					<DropdownMenuItem
@@ -39,7 +40,7 @@ export default function UserMenu() {
 							});
 						}}
 					>
-						Sign Out
+						{m.sign_out()}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

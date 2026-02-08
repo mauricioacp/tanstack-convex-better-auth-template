@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
@@ -22,6 +23,22 @@ function getGitCommit(): string {
 
 export default defineConfig({
 	plugins: [
+		paraglideVitePlugin({
+			project: "./project.inlang",
+			outdir: "./src/paraglide",
+			emitTsDeclarations: true,
+			strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
+			urlPatterns: [
+				{
+					pattern: "/:path(.*)?",
+					localized: [
+						["es", "/es/:path(.*)?"],
+						["en", "/:path(.*)?"],
+					],
+				},
+			],
+			disableAsyncLocalStorage: true,
+		}),
 		tsconfigPaths(),
 		tailwindcss(),
 		tanstackStart(),

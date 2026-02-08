@@ -13,6 +13,7 @@ import {
 import { FormField } from "@/components/ui/form-field";
 import { authClient } from "@/lib/auth-client";
 import { emailSchema } from "@/lib/validations";
+import * as m from "@/paraglide/messages";
 
 export default function ForgotPasswordForm() {
 	const [submitted, setSubmitted] = useState(false);
@@ -43,14 +44,12 @@ export default function ForgotPasswordForm() {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle>Check your email</CardTitle>
-					<CardDescription>
-						If an account exists with that email, we sent a password reset link.
-					</CardDescription>
+					<CardTitle>{m.check_your_email()}</CardTitle>
+					<CardDescription>{m.reset_email_sent()}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Link to="/sign-in" className="text-xs underline underline-offset-4">
-						Back to Sign In
+						{m.back_to_sign_in()}
 					</Link>
 				</CardContent>
 			</Card>
@@ -60,10 +59,8 @@ export default function ForgotPasswordForm() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Forgot Password</CardTitle>
-				<CardDescription>
-					Enter your email to receive a reset link
-				</CardDescription>
+				<CardTitle>{m.forgot_password_title()}</CardTitle>
+				<CardDescription>{m.forgot_password_description()}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<form
@@ -74,7 +71,12 @@ export default function ForgotPasswordForm() {
 					}}
 					className="space-y-4"
 				>
-					<FormField form={form} name="email" label="Email" type="email" />
+					<FormField
+						form={form}
+						name="email"
+						label={m.email_label()}
+						type="email"
+					/>
 
 					<form.Subscribe>
 						{(state) => (
@@ -84,7 +86,7 @@ export default function ForgotPasswordForm() {
 								loading={state.isSubmitting}
 								disabled={!state.canSubmit}
 							>
-								Send Reset Link
+								{m.send_reset_link()}
 							</Button>
 						)}
 					</form.Subscribe>
@@ -92,7 +94,7 @@ export default function ForgotPasswordForm() {
 
 				<div className="mt-4 text-center text-xs">
 					<Link to="/sign-in" className="underline underline-offset-4">
-						Back to Sign In
+						{m.back_to_sign_in()}
 					</Link>
 				</div>
 			</CardContent>

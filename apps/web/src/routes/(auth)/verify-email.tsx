@@ -3,12 +3,13 @@ import z from "zod";
 
 import VerifyEmailForm from "@/features/auth/components/verify-email-form";
 import { seo } from "@/lib/seo";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/(auth)/verify-email")({
 	validateSearch: z.object({
 		email: z.email(),
 	}),
-	head: () => seo({ title: "Verificar email" }),
+	head: () => seo({ title: m.seo_verify_email(), path: "/verify-email" }),
 	component: VerifyEmailPage,
 });
 

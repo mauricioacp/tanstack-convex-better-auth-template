@@ -15,6 +15,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { getToken } from "@/lib/auth-server";
 import { seo } from "@/lib/seo";
+import { ThemeProvider } from "@/lib/theme-provider";
+import { getLocale } from "@/paraglide/runtime.js";
 
 import Header from "../components/header";
 import appCss from "../index.css?url";
@@ -36,6 +38,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 			...seo({}).meta,
 		],
 		links: [{ rel: "stylesheet", href: appCss }],
+		scripts: [
+			{
+				children: `(function(){try{var t=localStorage.getItem("theme");var d=window.matchMedia("(prefers-color-scheme:dark)").matches;var c=t==="light"||t==="dark"?t:d?"dark":"light";document.documentElement.classList.add(c)}catch(e){}})()`,
+			},
+		],
 	}),
 
 	component: RootDocument,
@@ -59,20 +66,22 @@ function RootDocument() {
 			authClient={authClient}
 			initialToken={context.token}
 		>
-			<html lang="en" className="dark">
-				<head>
-					<HeadContent />
-				</head>
-				<body>
-					<div className="grid h-svh grid-rows-[auto_1fr]">
-						<Header />
-						<Outlet />
-					</div>
-					<Toaster richColors />
-					<TanStackRouterDevtools position="bottom-left" />
-					<Scripts />
-				</body>
-			</html>
+			<ThemeProvider>
+				<html lang={getLocale()}>
+					<head>
+						<HeadContent />
+					</head>
+					<body>
+						<div className="grid h-svh grid-rows-[auto_1fr]">
+							<Header />
+							<Outlet />
+						</div>
+						<Toaster richColors />
+						<TanStackRouterDevtools position="bottom-left" />
+						<Scripts />
+					</body>
+				</html>
+			</ThemeProvider>
 		</ConvexBetterAuthProvider>
 	);
 }

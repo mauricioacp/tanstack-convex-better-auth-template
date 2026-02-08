@@ -14,6 +14,7 @@ import {
 import { FormField } from "@/components/ui/form-field";
 import { authClient } from "@/lib/auth-client";
 import { passwordSchema } from "@/lib/validations";
+import * as m from "@/paraglide/messages";
 
 export default function ResetPasswordForm({ token }: { token: string }) {
 	const navigate = useNavigate();
@@ -32,11 +33,11 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 				},
 				{
 					onSuccess: () => {
-						toast.success("Password reset successful");
+						toast.success(m.password_reset_success());
 						navigate({ to: "/sign-in" });
 					},
 					onError: (err) => {
-						setError(err.error.message || "Failed to reset password");
+						setError(err.error.message || m.failed_to_reset_password());
 					},
 				},
 			);
@@ -48,7 +49,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 					confirmPassword: z.string(),
 				})
 				.refine((data) => data.password === data.confirmPassword, {
-					message: "Passwords do not match",
+					message: m.passwords_do_not_match(),
 					path: ["confirmPassword"],
 				}),
 		},
@@ -57,8 +58,8 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Reset Password</CardTitle>
-				<CardDescription>Enter your new password</CardDescription>
+				<CardTitle>{m.reset_password()}</CardTitle>
+				<CardDescription>{m.reset_password_description()}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<form
@@ -72,13 +73,13 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 					<FormField
 						form={form}
 						name="password"
-						label="New Password"
+						label={m.new_password()}
 						type="password"
 					/>
 					<FormField
 						form={form}
 						name="confirmPassword"
-						label="Confirm Password"
+						label={m.confirm_password()}
 						type="password"
 					/>
 
@@ -86,12 +87,12 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 						<div className="space-y-2">
 							<p className="text-destructive text-xs">{error}</p>
 							<p className="text-xs">
-								Your reset link may have expired.{" "}
+								{m.reset_link_expired()}{" "}
 								<Link
 									to="/forgot-password"
 									className="underline underline-offset-4"
 								>
-									Request a new one
+									{m.request_new_link()}
 								</Link>
 							</p>
 						</div>
@@ -105,7 +106,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 								loading={state.isSubmitting}
 								disabled={!state.canSubmit}
 							>
-								Reset Password
+								{m.reset_password()}
 							</Button>
 						)}
 					</form.Subscribe>

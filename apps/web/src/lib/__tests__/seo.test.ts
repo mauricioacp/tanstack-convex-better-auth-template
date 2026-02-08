@@ -58,4 +58,28 @@ describe("seo", () => {
 		);
 		expect(imgMeta).toHaveLength(0);
 	});
+
+	it("should include hreflang links when path is provided", () => {
+		const result = seo({ title: "Sign In", path: "/sign-in" });
+		expect(result.links).toContainEqual({
+			rel: "alternate",
+			hrefLang: "en",
+			href: "/sign-in",
+		});
+		expect(result.links).toContainEqual({
+			rel: "alternate",
+			hrefLang: "es",
+			href: "/es/sign-in",
+		});
+		expect(result.links).toContainEqual({
+			rel: "alternate",
+			hrefLang: "x-default",
+			href: "/sign-in",
+		});
+	});
+
+	it("should return empty links when path is not provided", () => {
+		const result = seo({});
+		expect(result.links).toEqual([]);
+	});
 });

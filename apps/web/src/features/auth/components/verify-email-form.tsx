@@ -13,6 +13,7 @@ import {
 import { FormField } from "@/components/ui/form-field";
 import { useCountdown } from "@/hooks/use-countdown";
 import { authClient } from "@/lib/auth-client";
+import * as m from "@/paraglide/messages";
 
 const RESEND_COOLDOWN = 60;
 
@@ -34,7 +35,7 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 				{
 					onSuccess: () => {
 						navigate({ to: "/dashboard" });
-						toast.success("Email verified successfully");
+						toast.success(m.email_verified());
 					},
 					onError: (error) => {
 						toast.error(error.error.message);
@@ -44,7 +45,7 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 		},
 		validators: {
 			onSubmit: z.object({
-				otp: z.string().length(6, "Code must be 6 digits"),
+				otp: z.string().length(6, m.code_must_be_6_digits()),
 			}),
 		},
 	});
@@ -55,9 +56,9 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Verify Your Email</CardTitle>
+				<CardTitle>{m.verify_email()}</CardTitle>
 				<CardDescription>
-					We sent a verification code to <strong>{email}</strong>
+					{m.verification_sent()} <strong>{email}</strong>
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
@@ -72,8 +73,8 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 					<FormField
 						form={form}
 						name="otp"
-						label="Verification Code"
-						placeholder="Enter 6-digit code"
+						label={m.verification_code()}
+						placeholder={m.enter_code()}
 						inputMode="numeric"
 					/>
 
@@ -85,14 +86,14 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 								loading={state.isSubmitting}
 								disabled={!state.canSubmit}
 							>
-								Verify Email
+								{m.verify_button()}
 							</Button>
 						)}
 					</form.Subscribe>
 				</form>
 
 				<div className="mt-4 text-center text-xs">
-					Didn't receive a code?{" "}
+					{m.didnt_receive_code()}{" "}
 					<Button
 						variant="link"
 						className="h-auto p-0 text-xs underline underline-offset-4"
@@ -102,13 +103,15 @@ export default function VerifyEmailForm({ email }: { email: string }) {
 								email,
 								type: "email-verification",
 							});
-							toast.success("Verification code resent");
+							toast.success(m.verification_resent());
 							startResendCooldown(RESEND_COOLDOWN);
 						}}
 					>
 						{isResendCoolingDown
-							? `Resend Code (${resendSecondsLeft}s)`
-							: "Resend Code"}
+							? m.resend_code_countdown({
+									seconds: String(resendSecondsLeft),
+								})
+							: m.resend_code()}
 					</Button>
 				</div>
 			</CardContent>
