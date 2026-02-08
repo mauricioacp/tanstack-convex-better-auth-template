@@ -14,6 +14,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { Toaster } from "@/components/ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { getToken } from "@/lib/auth-server";
+import { seo } from "@/lib/seo";
 
 import Header from "../components/header";
 import appCss from "../index.css?url";
@@ -22,31 +23,19 @@ const getAuth = createServerFn({ method: "GET" }).handler(async () => {
 	return await getToken();
 });
 
-export interface RouterAppContext {
+export type RouterAppContext = {
 	queryClient: QueryClient;
 	convexQueryClient: ConvexQueryClient;
-}
+};
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
-			{
-				charSet: "utf-8",
-			},
-			{
-				name: "viewport",
-				content: "width=device-width, initial-scale=1",
-			},
-			{
-				title: "Acme",
-			},
+			{ charSet: "utf-8" },
+			{ name: "viewport", content: "width=device-width, initial-scale=1" },
+			...seo({}).meta,
 		],
-		links: [
-			{
-				rel: "stylesheet",
-				href: appCss,
-			},
-		],
+		links: [{ rel: "stylesheet", href: appCss }],
 	}),
 
 	component: RootDocument,
@@ -72,7 +61,6 @@ function RootDocument() {
 		>
 			<html lang="en" className="dark">
 				<head>
-					<title>Acme</title>
 					<HeadContent />
 				</head>
 				<body>

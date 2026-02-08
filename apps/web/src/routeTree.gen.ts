@@ -9,8 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as authVerifyEmailRouteImport } from './routes/(auth)/verify-email'
 import { Route as authAuthRouteImport } from './routes/(auth)/_auth'
 import { Route as authAuthSignUpRouteImport } from './routes/(auth)/_auth/sign-up'
@@ -19,15 +21,24 @@ import { Route as authAuthResetPasswordRouteImport } from './routes/(auth)/_auth
 import { Route as authAuthForgotPasswordRouteImport } from './routes/(auth)/_auth/forgot-password'
 import { Route as authApiAuthSplatRouteImport } from './routes/(auth)/api/auth/$'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const authVerifyEmailRoute = authVerifyEmailRouteImport.update({
   id: '/(auth)/verify-email',
@@ -66,8 +77,9 @@ const authApiAuthSplatRoute = authApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/verify-email': typeof authVerifyEmailRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/health': typeof ApiHealthRoute
   '/forgot-password': typeof authAuthForgotPasswordRoute
   '/reset-password': typeof authAuthResetPasswordRoute
   '/sign-in': typeof authAuthSignInRoute
@@ -76,8 +88,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/verify-email': typeof authVerifyEmailRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/health': typeof ApiHealthRoute
   '/forgot-password': typeof authAuthForgotPasswordRoute
   '/reset-password': typeof authAuthResetPasswordRoute
   '/sign-in': typeof authAuthSignInRoute
@@ -87,9 +100,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/(auth)/_auth': typeof authAuthRouteWithChildren
   '/(auth)/verify-email': typeof authVerifyEmailRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/health': typeof ApiHealthRoute
   '/(auth)/_auth/forgot-password': typeof authAuthForgotPasswordRoute
   '/(auth)/_auth/reset-password': typeof authAuthResetPasswordRoute
   '/(auth)/_auth/sign-in': typeof authAuthSignInRoute
@@ -100,8 +115,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
     | '/verify-email'
+    | '/dashboard'
+    | '/api/health'
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
@@ -110,8 +126,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/verify-email'
+    | '/dashboard'
+    | '/api/health'
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
@@ -120,9 +137,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
+    | '/_authenticated'
     | '/(auth)/_auth'
     | '/(auth)/verify-email'
+    | '/_authenticated/dashboard'
+    | '/api/health'
     | '/(auth)/_auth/forgot-password'
     | '/(auth)/_auth/reset-password'
     | '/(auth)/_auth/sign-in'
@@ -132,19 +151,20 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   authAuthRoute: typeof authAuthRouteWithChildren
   authVerifyEmailRoute: typeof authVerifyEmailRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   authApiAuthSplatRoute: typeof authApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -153,6 +173,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/(auth)/verify-email': {
       id: '/(auth)/verify-email'
@@ -206,6 +240,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 interface authAuthRouteChildren {
   authAuthForgotPasswordRoute: typeof authAuthForgotPasswordRoute
   authAuthResetPasswordRoute: typeof authAuthResetPasswordRoute
@@ -226,20 +272,12 @@ const authAuthRouteWithChildren = authAuthRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   authAuthRoute: authAuthRouteWithChildren,
   authVerifyEmailRoute: authVerifyEmailRoute,
+  ApiHealthRoute: ApiHealthRoute,
   authApiAuthSplatRoute: authApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
